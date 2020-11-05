@@ -1,7 +1,6 @@
 #ifndef DEAL_H
 #define DEAL_H
 #include "include_list.h"
-
 #define N 25
 using namespace std;
 
