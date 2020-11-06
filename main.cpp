@@ -50,7 +50,7 @@ int main(int argc,char *argv[])
         spece_set.load();
         cerr << spece_set.short_filenum << endl;
         LOS shortlos;
-        shortlos.shortLOS();
+        shortlos.shortLOS(spece_set);
 
         spece_ionall.Load(shortlos);
 
