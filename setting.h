@@ -92,7 +92,7 @@ int Setting::load()
 {
 
   fscanf(LOSfile, "%lf %lf %lf %lf %d", &redshift_center, &xspec, &yspec, &zspec, &direction);
-  //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl; 
+  //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl;
   redshift_begin = redshift_center;
   redshift_end = redshift_center;
   redshift = redshift_center;
@@ -135,7 +135,7 @@ int Setting::load()
 void Parameter::load(double set_boxsize)
 {
   float L;
-  double boxsize=set_boxsize;
+  double boxsize = set_boxsize;
 
   set_boxsize /= h;
   L = set_boxsize;
