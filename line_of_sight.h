@@ -31,7 +31,7 @@ public:
     double yrotline;
     BIN *bin;
 
-    void shortLOS();
+    void shortLOS(Setting spece_set);
     void clear();
     int RotateCoords(double x, double y, double z, double theta, double phi);
     int InverseRotateCoords(double x, double y, double z, double theta, double phi);
@@ -42,7 +42,7 @@ public:
     }
 };
 
-void LOS::shortLOS()
+void LOS::shortLOS(Setting spece_set)
 {
     float redshift_center;
     redshift_center = spece_set.redshift_center;
