@@ -137,9 +137,13 @@ int Setting::Check_Z_File(double redshift)
   return File;
 }
 
-int Setting::load()
+int Setting::load(Los_pos &los_pos)
 {
-
+  xspec = los_pos.xspec;
+  yspec = los_pos.yspec;
+  zspec = los_pos.zspec;
+  redshift_center=los_pos.redshift_center;
+  direction=los_pos.direction;
   //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl;
   redshift_begin = redshift_center;
   redshift_end = redshift_center;
