@@ -33,11 +33,11 @@ public:
     vector<Spec_particle> spec_particles;
     Spec_particle sp;
 
-    int Check_Partical_Los(vector<Gas_1> &gp);
-    void SmoothSpec(LOS &los);
+    int Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set);
+    void SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set);
 };
 
-int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp)
+int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set)
 {
     spec_particles.clear();
     double xspec = spece_set.xspec;
@@ -132,20 +132,20 @@ int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp)
     cerr << spec_particles.size() << " " << gp.size() << " " << spec_particles.size() / gp.size() << endl;
     return (0);
 }
-void Spec_particles::SmoothSpec(LOS &los)
+void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set)
 
 {
-
-    sprintf(filename, "./process/smooth_120.txt");
-    ofstream spf(filename);
+    char fileoutsmooth[200];
+    sprintf(fileoutsmooth, "./process/smooth_120.txt");
+    ofstream spf(fileoutsmooth);
 
     double irep[NDIM], part_pos[NDIM];
     float bound_min[NDIM], bound_max[NDIM];
 
     spece_set.redshift_center = los.bin[(int)((los.nzbins) / 2)].redshift;
     float redshift_center = spece_set.redshift_center;
-    float t = CosmicTime(redshift_center);
-    cosmopar(t);
+    float t = CosmicTime(redshift_center,spece_set);
+    cosmopar(t,spece_set);
     int n = los.nzbins;
     double *bin_coord;
     bin_coord = (double *)malloc((n + 1) * sizeof(double));
