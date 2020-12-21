@@ -36,8 +36,8 @@ public:
     //   float rho;
     //  float T;
 
-    void loadtable(int ionid);
-    void loadparam(datahead &b);
+    void loadtable(int ionid, Setting spece_set);
+    void loadparam(datahead &b, Setting spece_set);
 
     int pointtrace(int i, int j);
     double interplate(float &rho, float &T);
@@ -53,7 +53,7 @@ public:
     }
 };
 
-void ionfraction::loadtable(int ionid)
+void ionfraction::loadtable(int ionid, Setting spece_set)
 {
     double ionredshift = spece_set.redshift_center;
     FILE *table1, *table2;
@@ -61,6 +61,7 @@ void ionfraction::loadtable(int ionid)
     sprintf(prefix, "./ionfiles/");
     int z10 = (int)(ionredshift * 10.);
     int zlo = z10;
+    char filename[200];
     sprintf(filename, "%slt%.2dHM12_i9", prefix, z10);
     while ((table1 = fopen(filename, "r")) == NULL && zlo > 0)
     {
@@ -81,8 +82,8 @@ void ionfraction::loadtable(int ionid)
     if (zlo < 0 || zhi >= 80)
         exit(-1);
     cerr << "LOAD ION" << ionid << endl;
-    float redzlo = 0.1*zlo;
-	float redzhi = 0.1*zhi;
+    float redzlo = 0.1 * zlo;
+    float redzhi = 0.1 * zhi;
     int count = 0;
     int i = 0;
     double fraction1;
@@ -92,21 +93,21 @@ void ionfraction::loadtable(int ionid)
         char buffer1[100];
         ionin1 >> buffer1;
         char buffer2[100];
-        ionin2>>buffer2;
+        ionin2 >> buffer2;
         count++;
         if ((count - ionid) % 9 == 0)
         {
             R_assii(buffer1, fraction1);
             R_assii(buffer1, fraction2);
-            
-            iontable[i] = ((redzhi-ionredshift)*fraction1+(ionredshift-redzlo)*fraction2)/(redzhi-redzlo);
+
+            iontable[i] = ((redzhi - ionredshift) * fraction1 + (ionredshift - redzlo) * fraction2) / (redzhi - redzlo);
             i++;
         }
     }
     ionin1.close();
     ionin2.close();
 }
-void ionfraction::loadparam(datahead &b)
+void ionfraction::loadparam(datahead &b, Setting spece_set)
 {
     file_h = b.HubbleParam;
     unit_density = spece_set.spece_para.unit_Density;
@@ -154,8 +155,8 @@ double ionfraction::interplate(float &rho, float &T)
     if (fraction < 1e-10)
         cerr << "T : " << T << " rho : " << rho << " realrho : " << realrho << endl;
     if (fraction > 0.01)
-       // cerr << "good fraction ";
-    return realrho;
+        // cerr << "good fraction ";
+        return realrho;
 }
 void ionfraction::test()
 {
