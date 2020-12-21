@@ -67,7 +67,7 @@ class Ion_all
 {
 private:
   Ion_special ion;
-  void Load_ion(LOS &los);
+  void Load_ion(LOS &los, Setting &spece_set);
   void Load_ion_total(LOS &los);
 
 public:
@@ -83,12 +83,12 @@ public:
   double *zbins;
   double *gal_field;
 
-  void Load(LOS &los); //
-  int Tau(LOS &los);
+  void Load(LOS &los, Setting &spece_set); //
+  int Tau(LOS &los, Setting &spece_set);
   void Freeions();
 };
 
-void Ion_all::Load_ion(LOS &los)
+void Ion_all::Load_ion(LOS &los, Setting &spece_set)
 {
   FILE *specfile;
   char line[80];
@@ -179,13 +179,13 @@ void Ion_all::Load_ion_total(LOS &los)
       ion_total.metals[m][j] = 0;
   }
 }
-void Ion_all::Load(LOS &los)
+void Ion_all::Load(LOS &los, Setting &spece_set)
 {
-  Load_ion(los);
+  Load_ion(los, spece_set);
   Load_ion_total(los);
 }
 
-int Ion_all::Tau(LOS &los)
+int Ion_all::Tau(LOS &los, Setting &spece_set)
 {
   int counttest = 0;
   /* Calculate optical depth for given ion along line of sight */
@@ -246,8 +246,8 @@ int Ion_all::Tau(LOS &los)
   */
 
   float floatredshift = spece_set.redshift_center;
-  float t = CosmicTime(floatredshift);
-  cosmopar(t);
+  float t = CosmicTime(floatredshift, spece_set);
+  cosmopar(t, spece_set);
 
   //redshift_track = IonTotal.redshift[0];
   int nzbins = los.nzbins;
@@ -657,6 +657,5 @@ void Ion_all::Freeions()
   free(z);
   free(gal_field);
 }
-Ion_all spece_ionall;
 
 #endif
