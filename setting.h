@@ -4,6 +4,55 @@
 
 using namespace std;
 
+class Los_pos
+{
+public:
+  double redshift_center;
+  double xspec;
+  double yspec;
+  double zspec;
+  int direction;
+  Los_pos()
+  {
+    redshift_center = 0.0;
+    xspec = 0.0;
+    yspec = 0.0;
+    zspec = 0.0;
+    direction = -1;
+  }
+};
+
+class Los_poss
+{
+public:
+  int los_numbers;
+  vector<Los_pos> los_pos_vector;
+  void load(FILE *in)
+};
+
+void Los_poss::load(FILE *in)
+{
+  Los_pos los_point;
+  while (!feof(in))
+  {
+    /*
+    double t_redshift_center = 0.0;
+    double t_xspec = 0.0;
+    double t_yspec = 0.0;
+    double t_zspec = 0.0;
+    int t_direction = -1;
+    */
+    fscanf(in, "%lf %lf %lf %lf %d", &los_point.redshift_center, &los_point.xspec, &los_point.yspec, &los_point.zspec, &los_point.direction);
+
+    los_pos_vector.push_back(los_point);
+  }
+  los_pos_vector.pop_back();
+  if (los_pos_vector.size() ==los_numbers)
+  {
+    cerr<<"we got "<<los_numbers<<" lines,good!!!!!!!!!"<<endl;
+  }
+}
+
 class Parameter
 {
 public:
@@ -91,7 +140,6 @@ int Setting::Check_Z_File(double redshift)
 int Setting::load()
 {
 
-  fscanf(LOSfile, "%lf %lf %lf %lf %d", &redshift_center, &xspec, &yspec, &zspec, &direction);
   //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl;
   redshift_begin = redshift_center;
   redshift_end = redshift_center;
@@ -205,4 +253,5 @@ void Parameter::clear()
   aex3 = -20;
   aexhub = -20;
 }
+
 #endif
