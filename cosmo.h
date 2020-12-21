@@ -123,7 +123,7 @@ int cosmopar(float &t,Setting &spece_set) //here t may have a special unit pleas
 	return 0;
 }
 
-CosmicTime(float &z,Setting &spece_set) /* returns system time at redshift z */ //unit=40Gyr;
+float CosmicTime(float &z,Setting &spece_set) /* returns system time at redshift z */ //unit=40Gyr;
 	
 {
 	double tol = 1.e-6;
