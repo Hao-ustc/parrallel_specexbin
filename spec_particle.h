@@ -1,7 +1,7 @@
 #ifndef SPEC_PARTICLE_H
 #define SPEC_PARTICLE_H
 #include "include_all.h"
-//#define TEST
+#define TEST
 using namespace std;
 //class
 class Spec_particle
@@ -682,15 +682,21 @@ void Spec_particles::SmoothSpec(LOS &los)
         double unit_mass = spece_set.spece_para.unit_Mass;
         double unit_binsize = spece_cosmo.aex * spece_set.spece_para.unit_Length; //(spece_set.spece_para.unit_Length / (double)los.nzbins);
         double unittemp = unit_mass / DD(unit_binsize) / MHYDR;
-        efc << spece_ionall.ion_total.mass[i] * 0.76 * unittemp / spece_ionall.ions[0].atomwt << " "
-            << spece_ionall.ion_total.mass[i]*spece_ionall.ion_total.metals[1][i] * 1.0 / 0.009618 * spece_ionall.ions[7].fraction * pow(10, spece_ionall.ions[7].alpha) * unittemp / spece_ionall.ions[7].atomwt << " "
-            << spece_ionall.ion_total.mass[i]*spece_ionall.ion_total.metals[0][i] * unittemp / spece_ionall.ions[2].atomwt << endl;
+        efc
+            << spece_ionall.ion_total.mass[i] * 0.76 * unittemp / spece_ionall.ions[0].atomwt << " "
+            << spece_ionall.ion_total.mass[i] * spece_ionall.ion_total.metals[1][i] * 1.0 / 0.009618 * spece_ionall.ions[7].fraction * pow(10, spece_ionall.ions[7].alpha) * unittemp / spece_ionall.ions[7].atomwt << " "
+            << spece_ionall.ion_total.mass[i] * spece_ionall.ion_total.metals[0][i] * unittemp / spece_ionall.ions[2].atomwt << endl;
 
-        //efc1 << spece_ionall.ions[0].fraction*spece_ionall.ions[0].mass[i] * unittemp / spece_ionall.ions[0].atomwt << " "
-        efc1 <<spece_ionall.ions[1].fraction*spece_ionall.ions[1].mass[i] * unittemp / spece_ionall.ions[1].atomwt << " "
-             << spece_ionall.ions[5].mass[i] * unittemp / spece_ionall.ions[5].atomwt << " "
-             << spece_ionall.ions[6].mass[i] * unittemp / spece_ionall.ions[6].atomwt<<" " 
-             << spece_ionall.ions[8].mass[i] * unittemp / spece_ionall.ions[8].atomwt<< endl;
+        efc1
+            << spece_ionall.ions[0].fraction * spece_ionall.ions[0].mass[i] * unittemp / spece_ionall.ions[0].atomwt << " "
+            << spece_ionall.ions[1].fraction * spece_ionall.ions[1].mass[i] * unittemp / spece_ionall.ions[1].atomwt << " "
+            << spece_ionall.ions[2].mass[i] * unittemp / spece_ionall.ions[2].atomwt << " "
+            << spece_ionall.ions[3].mass[i] * unittemp / spece_ionall.ions[3].atomwt << " "
+            << spece_ionall.ions[4].mass[i] * unittemp / spece_ionall.ions[4].atomwt << " "
+            << spece_ionall.ions[5].mass[i] * unittemp / spece_ionall.ions[5].atomwt << " "
+            << spece_ionall.ions[6].mass[i] * unittemp / spece_ionall.ions[6].atomwt << " "
+            << spece_ionall.ions[7].mass[i] * unittemp / spece_ionall.ions[7].atomwt << " "
+            << spece_ionall.ions[8].mass[i] * unittemp / spece_ionall.ions[8].atomwt << endl;
 #endif
     }
 #ifdef TEST

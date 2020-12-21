@@ -4,7 +4,7 @@
 //#define deltah 0.01;
 //#define PALACE
 #define Nions 9
-#define LINES 2495
+//#define LINES 5000
 #define DELTR 0.005
 #define NUM_THREADS 100
 
@@ -74,7 +74,7 @@ public:
     vector<double> width;
 
     double deltah;
-    void load(int galaxy);
+    void load(int &galaxy, int &LINES);
     void clear();
 };
 void Palace::clear()
@@ -84,7 +84,7 @@ void Palace::clear()
     z.clear();
     width.clear();
 }
-void Palace::load(int galaxy)
+void Palace::load(int &galaxy, int &LINES)
 {
 
     char path[200];
@@ -118,7 +118,11 @@ void Palace::load(int galaxy)
         cerr << "get palace coordinate:     "
              << x.size() - y.size() << endl;
     }
-
+    if (x.size() != LINES)
+    {
+        cerr << "size wrrong!!!!!!" << x.size() << endl;
+        exit(-1);
+    }
     deltah = 3.0 / N2;
 
     for (int i = 10; i < N2 + 1; i++)
@@ -160,9 +164,9 @@ class Data_resolve
 
 public:
     double Redshift;
-    double tau;
-    double lambta;
-    double flux;
+    double tau[Nions];
+    double lambta[Nions];
+    double flux[Nions];
 };
 
 class Out
@@ -175,12 +179,8 @@ public:
     double width;
 };
 
-void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &galaxymax)
+void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &galaxymax, int LINES)
 {
-
-    vector<Out> resultout;
-    resultout.clear();
-    Out ropoint;
 
     vector<Data_resolve> data;
     Data_resolve p;
@@ -193,8 +193,8 @@ void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &ga
     sprintf(spece_set.file_redshift, "/data6/Hao_L/result/pure_redshift.txt");
     sprintf(spece_set.spec_ion_filename, "%sspecions_i9.dat", spece_set.prefix);
 
-    double EW_x[LINES];
-    double EW_y[LINES];
+    double *EW_x = new double[LINES];
+    double *EW_y = new double[LINES];
     for (int i = 0; i < LINES; i++)
     {
         EW_x[i] = 0.0;
@@ -209,11 +209,12 @@ void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &ga
     //galaxyR.load(filegalaxyR);
     for (int galaxy = galaxymin; galaxy <= galaxymax; galaxy++)
     {
-        sprintf(filename, "%s/width/%10s_ew_r_all_%03d.data", result_path, ion_info.ions[ion].name, galaxy);
-        ofstream out1(filename);
+        char outions[100];
+        sprintf(outions, "%s/width/ew_r_all_%03d.data", result_path, galaxy);
+        ofstream out1(outions);
 
         cerr << galaxy << endl;
-        tab.load(galaxy);
+        tab.load(galaxy, LINES);
         int read_flag = 0;
 
         char los[200];
@@ -237,13 +238,13 @@ void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &ga
 
             double redshift = spece_set.redshift_center;
             double r = 1000 * tab.x[read_flag];
-            ropoint.r = r/0.74/(1+redshift);
+            r = r / 0.74 / (1 + redshift);
             //ropoint.r2rvir = r/0.72 / (1000 * galaxyR.R_Vir[galaxy]); //output the radius
             //ropoint.r2rspash = ropoint.r2rvir / galaxyR.rspash2RVir[galaxy];
             //spece_set.redshift_center = 0.0;
-
-            sprintf(filename, "%s/galaxy%03d/tau_%f_%f_%f_%f.txt", result_path, galaxy, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
-            ifstream in(filename);
+            char filetau[100];
+            sprintf(filetau, "%s/galaxy%03d/tau_%f_%f_%f_%f.txt", result_path, galaxy, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
+            ifstream in(filetau);
             /*
             sprintf(filename, "%s/galaxy%03d/eff_%f_%f_%f_%f.txt", result_path, galaxy, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
             ifstream inefc(filename);
@@ -288,29 +289,45 @@ void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &ga
                     if (judge == 1)
                     {
                         R_assii(buffer, p.Redshift);
-                        p.lambta = (ion_info.ions[ion].lambda) * (1.0 + p.Redshift);
                     }
-                    else if (judge == (4 * (ion + 2)))
+                    else if ((judge % 4) == 0)
                     {
-                        R_assii(buffer, p.tau);
-                        p.flux = pow(2.71828, -1.0 * p.tau);
-                        data.push_back(p);
+                        ion = judge / 4 - 2;
+                        if (ion >= 0)
+                        {
+                            R_assii(buffer, p.tau[ion]);
+                            p.flux[ion] = pow(2.71828, -1.0 * p.tau[ion]);
+                            p.lambta[ion] = (ion_info.ions[ion].lambda) * (1.0 + p.Redshift);
+                            //p.flux =p.tau;
+                            if (ion == Nions - 1)
+                            {
+                                data.push_back(p);
+                            }
+                        }
                     }
                 }
             }
             in.close();
             //cerr << "read over" << endl;
-            double width = 0;
-            for (int i = 1; i < data.size(); i++)
+            double width[Nions] = {0.0};
+            for (int j = 0; j < Nions; j++)
             {
-                double dlambta = fabs(data[i].lambta - data[i - 1].lambta);
-                double flux = (data[i].flux + data[i - 1].flux) / 2.0;
-                double dwidth = dlambta * (1 - flux);
-                width += dwidth;
-            } //now width is the EW of the line
+                for (int i = 1; i < data.size(); i++)
+                {
+                    double dlambta = fabs(data[i].lambta[j] - data[i - 1].lambta[j]);
+                    double flux = (data[i].flux[j] + data[i - 1].flux[j]) / 2.0;
+                    double dwidth = dlambta * (1 - flux);
+                    width[j] += dwidth;
+                } //now width is the EW of the line
+            }
 
-            ropoint.width = width;
-            resultout.push_back(ropoint);
+            out1 << r << " ";
+            for (int j = 0; j < Nions; j++)
+            {
+                out1 << width[j] << " ";
+            }
+            out1 << endl;
+
             //out3<< column_mass << " " << column_density << endl;
             /*
             if (tab.x[read_flag] == 0)
@@ -331,17 +348,11 @@ void deal(int &ion, Ion_resolves &ion_info, Palace &tab, int &galaxymin, int &ga
     }
     */
         fclose(spece_set.LOSfile);
-        for (int i = 0; i < resultout.size(); i++)
-        {
-            out1 << resultout[i].r << " "
-                 << resultout[i].r2rvir << " "
-                 << resultout[i].r2rspash << " "
-                 << resultout[i].width << " "
-                 << log10(resultout[i].width) << endl;
-        }
         out1.close();
         tab.clear();
     }
+    delete[] EW_x;
+    delete[] EW_y;
 }
 //./data_resolve 0910 -1 10 30 will be run 10 11 ......29.
 int main(int argc, char *argv[])
@@ -360,20 +371,11 @@ int main(int argc, char *argv[])
     int galaxymax = 0;
     R_assii(argv[3], galaxymin);
     R_assii(argv[4], galaxymax);
-    if (ion == -1)
-    {
-        cerr << " 1" << endl;
-        for (ion = 0; ion < 9; ion++)
-        {
-            Palace tab;
-            deal(ion, ion_info, tab, galaxymin, galaxymax);
-        }
-    }
-    else if (ion >= 0)
-    {
-        cerr << " 11" << endl;
-        Palace tab;
-        cerr << " 111" << endl;
-        deal(ion, ion_info, tab, galaxymin, galaxymax);
-    }
+    int lines;
+    R_assii(argv[5], lines);
+
+    cerr << " 11" << endl;
+    Palace tab;
+    cerr << " 111" << endl;
+    deal(ion, ion_info, tab, galaxymin, galaxymax, lines);
 }

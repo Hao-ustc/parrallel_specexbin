@@ -14,7 +14,7 @@ public:
 };
 Cosmo spece_cosmo;
 
-int cosmopar(float &t,Setting &spece_set) //here t may have a special unit please pay attention to it
+int cosmopar(float &t) //here t may have a special unit please pay attention to it
 {
 	float t1;
 	double tol = 1.e-6;
@@ -123,7 +123,7 @@ int cosmopar(float &t,Setting &spece_set) //here t may have a special unit pleas
 	return 0;
 }
 
-float CosmicTime(float &z,Setting &spece_set) /* returns system time at redshift z */ //unit=40Gyr;
+float CosmicTime(float &z) /* returns system time at redshift z */ //unit=40Gyr;
 	
 {
 	double tol = 1.e-6;
