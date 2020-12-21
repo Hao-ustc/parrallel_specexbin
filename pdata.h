@@ -98,7 +98,7 @@ void readhead(bifstream &fi, datahead &b)
 }
 int gasid[IDMAX];
 
-void Prepare_partical(vector<Gas_1> &gp)
+void Prepare_partical(vector<Gas_1> &gp,Setting &spece_set)
 {
     double h = spece_set.spece_para.h;
     double vel_corr;
@@ -198,7 +198,7 @@ void Prepare_partical(vector<Gas_1> &gp)
     fprintf(stderr, "Physically rotated %d particles, because direction= %d\n", ri, spece_set.direction);
 }
 
-void Readdata(int filenum, vector<Gas_1> &gas)
+void Readdata(int filenum, vector<Gas_1> &gas,Setting &spece_set)
 {
 
     for (int i = 0; i < IDMAX; i++)
@@ -406,7 +406,7 @@ void Readdata(int filenum, vector<Gas_1> &gas)
         tempgasn = gas.size();
     }
 
-    Prepare_partical(gas);
+    Prepare_partical(gas,spece_set);
 }
 
 #endif
