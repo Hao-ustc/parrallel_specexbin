@@ -49,14 +49,14 @@ int main(int argc, char *argv[])
         spece_set.load(los_poss.los_pos_vector[losnum]);
         LOS shortlos;
         shortlos.shortLOS(spece_set);
-
-        spece_ionall.Load(shortlos);
+        Ion_all spece_ionall;
+        spece_ionall.Load(shortlos,spece_set);
         Spec_particles spece_particles;
-        spece_particles.Check_Partical_Los(gp);
-        spece_particles.SmoothSpec(shortlos);
+        spece_particles.Check_Partical_Los(gp,spece_set);
+        spece_particles.SmoothSpec(shortlos,spece_ionall,spece_set);
 
-        spece_ionall.Tau(shortlos);
-        int pospoint = OutTau(shortlos);
+        spece_ionall.Tau(shortlos,spece_set);
+        int pospoint = OutTau(shortlos,spece_ionall);
         cleanworkplace(shortlos);
     }
     fclose(spece_set.LOSfile);
