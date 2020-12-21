@@ -102,7 +102,7 @@ public:
 
   Parameter spece_para;
 
-  int load(); //temply for short
+  int load(Los_pos &los_pos); //temply for short
   //void setpara(Parameter &para);
   int Check_Z_File(double redshift);
   void clear();
