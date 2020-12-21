@@ -27,7 +27,7 @@ class Los_poss
 public:
   int los_numbers;
   vector<Los_pos> los_pos_vector;
-  void load(FILE *in)
+  void load(FILE *in);
 };
 
 void Los_poss::load(FILE *in)
