@@ -160,8 +160,8 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
     {
         ionfraction tempionfrac;
         ionfrac.push_back(tempionfrac);
-        ionfrac[i].loadtable(i + 1);
-        ionfrac[i].loadparam(b);
+        ionfrac[i].loadtable(i + 1,spece_set);
+        ionfrac[i].loadparam(b,spece_set);
 
     } //load fraction_lookback_table
     //maybe we want to output some files here
