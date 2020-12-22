@@ -81,7 +81,7 @@ void galaxy_map::output()
     }
 }
 
-void cleanworkplace(LOS &los)
+void cleanworkplace(LOS &los,Ion_all spece_ionall)
 {
     //spece_set.clear();
     cerr << "spece_set has been cleared" << endl;
