@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         spece_particles.SmoothSpec(shortlos,spece_ionall,spece_set);
 
         spece_ionall.Tau(shortlos,spece_set);
-        int pospoint = OutTau(shortlos,spece_ionall);
+        int pospoint = OutTau(shortlos,spece_ionall,spece_set);
         cleanworkplace(shortlos);
     }
     fclose(spece_set.LOSfile);
