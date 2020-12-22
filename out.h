@@ -2,7 +2,7 @@
 #define _OUT_H
 #include "include_all.h"
 
-int OutTau(LOS &los,Ion_all &spece_ionall)
+int OutTau(LOS &los,Ion_all &spece_ionall,Setting spece_set)
 {
     int pointuseful=0;
 
