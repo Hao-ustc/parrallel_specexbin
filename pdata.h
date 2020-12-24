@@ -220,9 +220,9 @@ void Readdata(int filenum, vector<Gas_1> &gas,Setting &spece_set)
         float sfr;
         float z[4];
         Gas_1 gaspoint;
-
-        sprintf(filename, "/data11/huiwang/Coma/snapdir_%03d/snap_gw_%03d.%d", filenum, filenum, i);
-        fi.open(filename, 0);
+        char filenamep[200];
+        sprintf(filenamep, "/data11/huiwang/Coma/snapdir_%03d/snap_gw_%03d.%d", filenum, filenum, i);
+        fi.open(filenamep, 0);
         fi.clear();
         fi.rewind();
         readhead(fi, b);

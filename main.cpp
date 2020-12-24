@@ -1,6 +1,7 @@
 #include <iostream>
 //#define para
 #include "function.h"
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -9,8 +10,8 @@ int main(int argc, char *argv[])
     //sprintf(spece_set.TIME,"0419");
 
     //spece_set.runtime=0;
+    int NUM_THREADS = 64;
     int test = -1;
-    
 
     Setting spece_set;
     sprintf(spece_set.TIME, "%s", argv[1]);
@@ -25,6 +26,8 @@ int main(int argc, char *argv[])
     spece_set.spece_para.H_0 = 73;        //73;
     spece_set.spece_para.h = 0.01 * spece_set.spece_para.H_0;
 
+    spece_set.phi = -234.0;
+
     int galaxyposion = 0;
     int parallelcore = 0;
     R_assii(argv[2], galaxyposion);
@@ -37,30 +40,46 @@ int main(int argc, char *argv[])
         return 0;
     }
     Los_poss los_poss;
-    R_assii(argv[4],los_poss.los_numbers);
+    R_assii(argv[4], los_poss.los_numbers);
     los_poss.load(spece_set.LOSfile);
-    spece_set.load(los_poss.los_pos_vector[0]);//to get filenum
+    fclose(spece_set.LOSfile);
+    spece_set.load(los_poss.los_pos_vector[0]); //to get filenum
     vector<Gas_1> gp;
     gp.clear();
-    Readdata(spece_set.short_filenum, gp,spece_set);
+    Readdata(spece_set.short_filenum, gp, spece_set);
+    R_assii(argv[5], NUM_THREADS);
+    omp_set_num_threads(NUM_THREADS);
 
-    for(int losnum=0;losnum<los_poss.los_pos_vector.size();losnum++)
+#pragma omp parallel firstprivate(spece_set)
     {
-        spece_set.load(los_poss.los_pos_vector[losnum]);
-        LOS shortlos;
-        shortlos.shortLOS(spece_set);
-        Ion_all spece_ionall;
-        spece_ionall.Load(shortlos,spece_set);
-        Spec_particles spece_particles;
-        spece_particles.Check_Partical_Los(gp,spece_set);
-        spece_particles.SmoothSpec(shortlos,spece_ionall,spece_set);
+        int thread_id;
+        thread_id = omp_get_thread_num();
 
-        spece_ionall.Tau(shortlos,spece_set);
-        int pospoint = OutTau(shortlos,spece_ionall,spece_set);
-        cleanworkplace(shortlos,spece_ionall);
+        for (int losnum = thread_id; losnum < 100; losnum += NUM_THREADS)
+        {
+            spece_set.load(los_poss.los_pos_vector[losnum]);
+
+
+            LOS shortlos;
+            
+            shortlos.shortLOS(spece_set);
+            //cerr << "&&& 1" << endl;
+            Ion_all spece_ionall;
+            spece_ionall.Load(shortlos, spece_set);
+            //cerr << "&&& 2" << endl;
+            Spec_particles spece_particles;
+            spece_particles.Check_Partical_Los(gp, spece_set);
+            //cerr << "&&& 3" << endl;
+            spece_particles.SmoothSpec(shortlos, spece_ionall, spece_set);
+            //cerr << "&&& 4" << endl;
+            spece_ionall.Tau(shortlos, spece_set);
+            //cerr << "&&& 5" << endl;
+            int pospoint = OutTau(shortlos, spece_ionall, spece_set);
+            cleanworkplace(shortlos, spece_ionall);
+            
+        }
     }
-    fclose(spece_set.LOSfile);
-    
+
     /*
     galaxy_map density_map;
     sprintf(density_map.filedestination, "./analyze/density");

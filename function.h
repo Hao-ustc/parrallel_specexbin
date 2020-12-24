@@ -2,7 +2,7 @@
 #define _FUNCTION_H
 #include "include_all.h"
 #include <algorithm>
-#define NUM_THREADS 64
+
 #define Nmax 64
 using namespace std;
 

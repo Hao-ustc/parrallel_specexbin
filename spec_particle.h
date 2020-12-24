@@ -129,7 +129,7 @@ int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set)
             spec_particles.push_back(sp);
         }
     }
-    cerr << spec_particles.size() << " " << gp.size() << " " << spec_particles.size() / gp.size() << endl;
+    
     return (0);
 }
 void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set)
@@ -146,6 +146,8 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
     float redshift_center = spece_set.redshift_center;
     float t = CosmicTime(redshift_center,spece_set);
     cosmopar(t,spece_set);
+
+    
     int n = los.nzbins;
     double *bin_coord;
     bin_coord = (double *)malloc((n + 1) * sizeof(double));
@@ -156,23 +158,28 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
     //int tempn = spece_ionall.nions;
     vector<ionfraction> ionfrac;
     ionfrac.clear();
+   
     for (int i = 0; i < spece_ionall.nions; i++)
     {
+         
         ionfraction tempionfrac;
         ionfrac.push_back(tempionfrac);
         ionfrac[i].loadtable(i + 1,spece_set);
         ionfrac[i].loadparam(b,spece_set);
+        
 
     } //load fraction_lookback_table
     //maybe we want to output some files here
+   
     bound_min[0] = bound_min[1] = bound_min[2] = -HALFBOX;
     bound_max[0] = bound_max[1] = bound_max[2] = HALFBOX;
-    InitKernIntTable();
+    InitKernIntTable ktable;
     //omp_set_num_threads(NUM_THREADS);
     int countscp = 0;
     int countid = 0;
     double kernelcount = 0.0;
     int countscpall = 0;
+    
     //#pragma omp parallel
     {
         int id = 0;
@@ -295,15 +302,15 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
                                 frh = ionfrac[k].fraction * rhocgs / MHYDR * scp.hsmooth * spece_set.spece_para.unit_Length * spece_cosmo.aex; // ???
                                 while (ihi - ilo > 1)
                                 {
-                                    if (KernIntTable[(ilo + ihi) / 2][1] * frh < NHILIM)
+                                    if (ktable.KernIntTable[(ilo + ihi) / 2][1] * frh < NHILIM)
                                         ihi = (ilo + ihi) / 2;
                                     else
                                         ilo = (ilo + ihi) / 2;
                                 }
                                 if (ilo > 0)
-                                    ionfrac[k].fraction = coldphasemassfrac * (ionfrac[k].fraction * (KernIntTable[(ilo + ihi) / 2][0]) + 1 / (1 + pow((rhocgs / MHYDR * coldphasetemp) / P0BLITZ, ALPHA0BLITZ)) * (1 - KernIntTable[(ilo + ihi) / 2][0]));
-                                //if( KernIntTable[(ilo+ihi)/2][0] < 0.999999 )
-                                //fprintf(stdout,"INTKERNELNHLIMIT: % 5.3f %5.3f % 5.3f %6.2f %5d %5d %5.3e %7.5f % 7.5f % 5.3e % 5.3e % 5.3e %5.3e % 5.3e % 5.3e % 5.3e %5.3e\n",log10(rhocgs/MHYDR),log10(cp.temp),log10(ionfrac[k]),log10(frh),ilo,ihi,KernIntTable[(ilo+ihi)/2][1]*frh,KernIntTable[(ilo+ihi)/2][0],KernIntTable[(ilo+ihi)/2][1],log10(1-KernIntTable[(ilo+ihi)/2][1]),cp.hsmooth*unit_Length,cp.hsmooth,cp.sfr,coldphasemassfrac,1/(1+pow((rhocgs/MHYDR*coldphasetemp)/P0BLITZ,ALPHA0BLITZ)),(rhocgs/MHYDR*cp.temp),IonFrac(coldphasetemp,rhocgs,k));
+                                    ionfrac[k].fraction = coldphasemassfrac * (ionfrac[k].fraction * (ktable.KernIntTable[(ilo + ihi) / 2][0]) + 1 / (1 + pow((rhocgs / MHYDR * coldphasetemp) / P0BLITZ, ALPHA0BLITZ)) * (1 - ktable.KernIntTable[(ilo + ihi) / 2][0]));
+                                //if( ktable.KernIntTable[(ilo+ihi)/2][0] < 0.999999 )
+                                //fprintf(stdout,"INTKERNELNHLIMIT: % 5.3f %5.3f % 5.3f %6.2f %5d %5d %5.3e %7.5f % 7.5f % 5.3e % 5.3e % 5.3e %5.3e % 5.3e % 5.3e % 5.3e %5.3e\n",log10(rhocgs/MHYDR),log10(cp.temp),log10(ionfrac[k]),log10(frh),ilo,ihi,ktable.KernIntTable[(ilo+ihi)/2][1]*frh,ktable.KernIntTable[(ilo+ihi)/2][0],ktable.KernIntTable[(ilo+ihi)/2][1],log10(1-ktable.KernIntTable[(ilo+ihi)/2][1]),cp.hsmooth*unit_Length,cp.hsmooth,cp.sfr,coldphasemassfrac,1/(1+pow((rhocgs/MHYDR*coldphasetemp)/P0BLITZ,ALPHA0BLITZ)),(rhocgs/MHYDR*cp.temp),IonFrac(coldphasetemp,rhocgs,k));
                             }
                         }
                         if ((bin_min <= 0 && bin_max == 0) || (bin_min >= n - 1 && bin_max >= n - 1))
@@ -552,12 +559,7 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
 
                                 for (k = 0; k < spece_ionall.nions; k++)
                                 {
-                                    /* #pragma omp critical
-                                    {
-                                        cerr<<k<<"  :  "<<ionfrac[k].fraction<<endl;
-                                        ionfrac[k].test();
-                                    }
-                                    */
+                                    
                                     if (spece_ionall.ions[k].Zcolumn == -1)
                                     {
                                         ion_weight = ionfrac[k].fraction;

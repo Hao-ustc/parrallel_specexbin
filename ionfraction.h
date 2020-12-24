@@ -81,7 +81,7 @@ void ionfraction::loadtable(int ionid, Setting spece_set)
     ifstream ionin2(filename);
     if (zlo < 0 || zhi >= 80)
         exit(-1);
-    cerr << "LOAD ION" << ionid << endl;
+    //cerr << "LOAD ION" << ionid << endl;
     float redzlo = 0.1 * zlo;
     float redzhi = 0.1 * zhi;
     int count = 0;
@@ -153,7 +153,7 @@ double ionfraction::interplate(float &rho, float &T)
     //cerr <<y1<<" "<<y2<<" "<<y3<<" "<<y4<<" "<<t<<" " <<itemp<< endl;
     fraction = pow(10., (1. - t) * (1. - u) * y1 + t * (1. - u) * y2 + t * u * y3 + (1. - t) * u * y4);
     if (fraction < 1e-10)
-        cerr << "T : " << T << " rho : " << rho << " realrho : " << realrho << endl;
+        //cerr << "T : " << T << " rho : " << rho << " realrho : " << realrho << endl;
     if (fraction > 0.01)
         // cerr << "good fraction ";
         return realrho;
@@ -163,9 +163,9 @@ void ionfraction::test()
     if (isnan(fraction) && isinf(t))
     {
 
-        cerr << " unitdensity:  " << unit_density;
-        cerr << " aex:   " << aex;
-        cerr << " rho : " << realrho << endl;
+        //cerr << " unitdensity:  " << unit_density;
+        //cerr << " aex:   " << aex;
+        //cerr << " rho : " << realrho << endl;
     }
 }
 #endif
