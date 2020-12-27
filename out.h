@@ -9,9 +9,9 @@ int OutTau(LOS &los,Ion_all &spece_ionall,Setting spece_set,vector<double> &reds
 
 
     char filenametau[200];
-    sprintf(filenametau, "./result/%s/galaxy%s/tau_%f_%f_%f_%f.txt", spece_set.TIME,spece_set.galaxy,spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
+    sprintf(filenametau, "./result/%s/galaxy%05d/tau_%f_%f_%f_%f.txt", spece_set.TIME,spece_set.galaxyindex_spec,spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
     ofstream out(filenametau);
-    sprintf(filenametau, "./result/%s/galaxy%s/flux_%f_%f_%f_%f.txt", spece_set.TIME,spece_set.galaxy ,spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
+    sprintf(filenametau, "./result/%s/galaxy%05d/flux_%f_%f_%f_%f.txt", spece_set.TIME,spece_set.galaxyindex_spec ,spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
     ofstream out2(filenametau);
     out << "redshift "
         << "all_rho "
