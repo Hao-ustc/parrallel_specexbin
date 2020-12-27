@@ -2,7 +2,7 @@
 #define _OUT_H
 #include "include_all.h"
 
-int OutTau(LOS &los,Ion_all &spece_ionall,Setting spece_set)
+int OutTau(LOS &los,Ion_all &spece_ionall,Setting spece_set,vector<double> &redshift_track_EW)
 {
     int pointuseful=0;
 
@@ -49,6 +49,7 @@ int OutTau(LOS &los,Ion_all &spece_ionall,Setting spece_set)
         if(redshift_track==0) pointuseful=i;
         if (redshift_track > redshift_begin && redshift_track < redshift_end)
         {
+            redshift_track_EW.push_back(redshift_track);
             
             double h = spece_set.spece_para.h;
             double aex = spece_cosmo.aex;
