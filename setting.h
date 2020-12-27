@@ -99,6 +99,7 @@ public:
   double zspec;         //load
   int lines_spec;       //load
   int direction;        //load
+  int galaxyindex_spec;  //load
   char namesuffix[200]; //load
   double theta;         //to be 0
   double phi;           //to be 0
@@ -161,6 +162,7 @@ int Setting::load(Los_pos &los_pos)
   yspec = los_pos.yspec;
   zspec = los_pos.zspec;
   lines_spec=los_pos.file_lines;
+  galaxyindex_spec=los_pos.galaxyindex;
   redshift_center=los_pos.redshift_center;
   direction=los_pos.direction;
   //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl;
