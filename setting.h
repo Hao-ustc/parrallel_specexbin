@@ -13,6 +13,9 @@ public:
   double zspec;
   int direction;
   int file_lines;
+
+  double rp;
+  double rp_rvir;
   Los_pos()
   {
     redshift_center = 0.0;
@@ -21,22 +24,28 @@ public:
     zspec = 0.0;
     direction = -1;
     file_lines=-1;
+
+    rp=0.0;
+    rp_rvir=0.0;
+
   }
 };
 
 class Los_poss
 {
 public:
+FILE *in_los;
+FILE *in_palace;
   int los_numbers;
   vector<Los_pos> los_pos_vector;
-  void load(FILE *in);
+  void load();
 };
 
-void Los_poss::load(FILE *in)
+void Los_poss::load()
 {
   Los_pos los_point;
   int t_lines=0;
-  while (!feof(in))
+  while (!feof(in_los))
   {
     /*
     double t_redshift_center = 0.0;
@@ -45,7 +54,9 @@ void Los_poss::load(FILE *in)
     double t_zspec = 0.0;
     int t_direction = -1;
     */
-    fscanf(in, "%lf %lf %lf %lf %d", &los_point.redshift_center, &los_point.xspec, &los_point.yspec, &los_point.zspec, &los_point.direction);
+    fscanf(in_los, "%lf %lf %lf %lf %d", &los_point.redshift_center, &los_point.xspec, &los_point.yspec, &los_point.zspec, &los_point.direction);
+    fscanf(in_palace, "%lf %lf ", &los_point.rp, &los_point.rp_rvir);
+
     los_point.file_lines=t_lines;
     los_pos_vector.push_back(los_point);
     t_lines++;
