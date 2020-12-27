@@ -12,6 +12,7 @@ public:
   double yspec;
   double zspec;
   int direction;
+  int file_lines;
   Los_pos()
   {
     redshift_center = 0.0;
@@ -19,6 +20,7 @@ public:
     yspec = 0.0;
     zspec = 0.0;
     direction = -1;
+    file_lines=-1;
   }
 };
 
@@ -33,6 +35,7 @@ public:
 void Los_poss::load(FILE *in)
 {
   Los_pos los_point;
+  int t_lines=0;
   while (!feof(in))
   {
     /*
@@ -43,8 +46,9 @@ void Los_poss::load(FILE *in)
     int t_direction = -1;
     */
     fscanf(in, "%lf %lf %lf %lf %d", &los_point.redshift_center, &los_point.xspec, &los_point.yspec, &los_point.zspec, &los_point.direction);
-
+    los_point.file_lines=t_lines;
     los_pos_vector.push_back(los_point);
+    t_lines++;
   }
   los_pos_vector.pop_back();
   if (los_pos_vector.size() ==los_numbers)
@@ -80,6 +84,7 @@ public:
   double xspec;         //load range -0.5 to 0.5
   double yspec;         //load
   double zspec;         //load
+  int lines_spec;       //load
   int direction;        //load
   char namesuffix[200]; //load
   double theta;         //to be 0
@@ -142,6 +147,7 @@ int Setting::load(Los_pos &los_pos)
   xspec = los_pos.xspec;
   yspec = los_pos.yspec;
   zspec = los_pos.zspec;
+  lines_spec=los_pos.file_lines;
   redshift_center=los_pos.redshift_center;
   direction=los_pos.direction;
   //cerr << "read file  " << xspec<< " " << yspec <<" "<<zspec<<" "<<redshift_center<<endl;
