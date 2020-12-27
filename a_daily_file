@@ -411,5 +411,9 @@ prepare：
 1.output EW during every calculation.
 2.initial los 
 3.data_resolve
+4.can pdata be universal???? 
+
+setting: line_spec:help us search for more details in palace.txt
+
 
 
