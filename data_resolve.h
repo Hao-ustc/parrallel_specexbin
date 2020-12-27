@@ -27,7 +27,7 @@ void my_EW::data_resolve( Ion_all &spece_ionall, Setting spece_set)
         {
             double dlambta = fabs(spece_ionall.ions[j].lambda * (redshift_track[i] - redshift_track[i - 1]));
             double flux = pow(2.71828, (-1.0 * spece_ionall.ions[j].vbins[i]));
-            flux += pow(2.71828, (-1.0 * spece_ionall.ions[k].vbins[i - 1]));
+            flux += pow(2.71828, (-1.0 * spece_ionall.ions[j].vbins[i - 1]));
             flux /= 2.0;
             double dwidth = dlambta * (1 - flux);
             ew[j] += dwidth;
