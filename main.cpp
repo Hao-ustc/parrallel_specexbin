@@ -32,6 +32,9 @@ int main(int argc, char *argv[])
     int parallelcore = 0;
     R_assii(argv[2], galaxyposion);
     R_assii(argv[3], parallelcore);
+
+    Los_poss los_poss;
+    R_assii(argv[4], los_poss.los_numbers);
     char los[100];
     sprintf(los, "./result/%s/parallel/los%03d_%01d.txt", argv[1], galaxyposion, parallelcore);
     if ((spece_set.LOSfile = fopen(los, "r")) == NULL)
@@ -39,17 +42,30 @@ int main(int argc, char *argv[])
         cerr << "Could not open file " << los << endl;
         return 0;
     }
-    Los_poss los_poss;
-    R_assii(argv[4], los_poss.los_numbers);
-    los_poss.load(spece_set.LOSfile);
+    los_poss.in_los = spece_set.LOSfile;
     fclose(spece_set.LOSfile);
+    sprintf(los, "./result/%s/parallel/palace%03d_%01d.txt", argv[1], galaxyposion, parallelcore);
+    if ((spece_set.LOSfile = fopen(los, "r")) == NULL)
+    {
+        cerr << "Could not open file " << los << endl;
+        return 0;
+    }
+    los_poss.in_palace = spece_set.LOSfile;
+    fclose(spece_set.LOSfile);
+    los_poss.load();
+    fclose(los_poss.in_los);
+    fclose(los_poss.in_palace); //finished
+
     spece_set.load(los_poss.los_pos_vector[0]); //to get filenum
     vector<Gas_1> gp;
     gp.clear();
     Readdata(spece_set.short_filenum, gp, spece_set);
+
+    sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
+    ofstream out_ew(los);
+
     R_assii(argv[5], NUM_THREADS);
     omp_set_num_threads(NUM_THREADS);
-
 #pragma omp parallel firstprivate(spece_set)
     {
         int thread_id;
@@ -59,9 +75,8 @@ int main(int argc, char *argv[])
         {
             spece_set.load(los_poss.los_pos_vector[losnum]);
 
-
             LOS shortlos;
-            
+
             shortlos.shortLOS(spece_set);
             //cerr << "&&& 1" << endl;
             Ion_all spece_ionall;
@@ -74,12 +89,27 @@ int main(int argc, char *argv[])
             //cerr << "&&& 4" << endl;
             spece_ionall.Tau(shortlos, spece_set);
             //cerr << "&&& 5" << endl;
-            int pospoint = OutTau(shortlos, spece_ionall, spece_set);
+            my_EW my_ew;
+            int pospoint = OutTau(shortlos, spece_ionall, spece_set, my_ew.redshift_track);
+
+            my_ew.data_resolve(spece_ionall, spece_set);
+            int t_main_lines = spece_set.lines_spec;
+#pragma omp critical
+            {
+                out_ew << t_main_lines << " "
+                       << los_poss.los_pos_vector[t_main_lines].rp << " "
+                       << los_poss.los_pos_vector[t_main_lines].rp_rvir << " ";
+                for (int ion = 0; ion < my_ew.Nions; ion++)
+                {
+                    out_ew << my_ew.ew[ion] << " ";
+                }
+                out_ew << endl;
+            }
+
             cleanworkplace(shortlos, spece_ionall);
-            
         }
     }
-
+    out_ew.close();
     /*
     galaxy_map density_map;
     sprintf(density_map.filedestination, "./analyze/density");
