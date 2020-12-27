@@ -57,4 +57,8 @@
 #include "gdata.h"
 #endif
 
+
+#ifndef _DATA_RESOLVE_H
+#include "data_resolve.h"
+#endif
 #endif
