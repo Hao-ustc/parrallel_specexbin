@@ -13,6 +13,7 @@ public:
   double zspec;
   int direction;
   int file_lines;
+  int galaxyindex;
 
   double rp;
   double rp_rvir;
@@ -24,6 +25,7 @@ public:
     zspec = 0.0;
     direction = -1;
     file_lines=-1;
+    galaxyindex=-1;
 
     rp=0.0;
     rp_rvir=0.0;
@@ -55,7 +57,7 @@ void Los_poss::load()
     int t_direction = -1;
     */
     fscanf(in_los, "%lf %lf %lf %lf %d", &los_point.redshift_center, &los_point.xspec, &los_point.yspec, &los_point.zspec, &los_point.direction);
-    fscanf(in_palace, "%lf %lf ", &los_point.rp, &los_point.rp_rvir);
+    fscanf(in_palace, "%lf %lf %d", &los_point.rp, &los_point.rp_rvir,&los_point.galaxyindex);
 
     los_point.file_lines=t_lines;
     los_pos_vector.push_back(los_point);
