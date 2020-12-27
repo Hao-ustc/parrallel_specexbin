@@ -118,14 +118,14 @@ int main(int argc, char *argv[])
     {
         char folder[100];
         cerr << mkdir(result_path, S_IRWXU) << endl;
-        sprintf(folder, "%s/width", result_path);
+        sprintf(folder, "%s/a_width", result_path);
         cerr << mkdir(folder, S_IRWXU) << endl;
-        sprintf(folder, "%s/parallel", result_path);
+        sprintf(folder, "%s/a_los", result_path);
         cerr << mkdir(folder, S_IRWXU) << endl;
         for (int i = 0; i < ga_choose.size(); i++)
         {
             int j = ga_choose[i];
-            sprintf(folder, "./result/%s/galaxy%03d", argv[1], i);
+            sprintf(folder, "./result/%s/galaxy%05d", argv[1], i);
             cerr << mkdir(folder, S_IRWXU) << endl;
         }
     }
