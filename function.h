@@ -1,6 +1,6 @@
 #ifndef _FUNCTION_H
 #define _FUNCTION_H
-#include "include_all.h"
+#include "voidA_include_all.h"
 #include <algorithm>
 
 #define Nmax 64
@@ -91,7 +91,7 @@ void cleanworkplace(LOS &los,Ion_all spece_ionall)
     cerr << "spece_ionall has been cleared" << endl;
 }
 
-void function_test(vector<Gas_1> &gp)
+void function_test(vector<GAS> &gp)
 {
 
     double max = 0.0;
