@@ -1,6 +1,7 @@
 #include <iostream>
 //#define para
 #include "function.h"
+#include "datachange.h"
 
 using namespace std;
 
@@ -57,9 +58,12 @@ int main(int argc, char *argv[])
     fclose(los_poss.in_palace); //finished
 
     spece_set.load(los_poss.los_pos_vector[0]); //to get filenum
-    vector<Gas_1> gp;
+    GASs gass;
+    gass.load(spece_set.short_filenum);
+    datafit(gass.void_gas,spece_set,gass.b);
+    vector<GAS> gp;
     gp.clear();
-    Readdata(spece_set.short_filenum, gp, spece_set);
+    gp.swap(gass.void_gas);
 
     sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
     ofstream out_ew(los);
@@ -85,7 +89,7 @@ int main(int argc, char *argv[])
             Spec_particles spece_particles;
             spece_particles.Check_Partical_Los(gp, spece_set);
             //cerr << "&&& 3" << endl;
-            spece_particles.SmoothSpec(shortlos, spece_ionall, spece_set);
+            spece_particles.SmoothSpec(shortlos, spece_ionall, spece_set,gass.b);
             //cerr << "&&& 4" << endl;
             spece_ionall.Tau(shortlos, spece_set);
             //cerr << "&&& 5" << endl;
