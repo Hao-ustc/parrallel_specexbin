@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     spece_set.spece_para.totMass = 0.258; //0.28; //0.238; //0.28;
     spece_set.spece_para.Lambda = 0.742;  //0.72; //0.762; //0.72;
     spece_set.spece_para.Omega_b = 0.045; //0.046; //0.0418; //0.046;
-    spece_set.spece_para.H_0 = 73;        //73;
+    spece_set.spece_para.H_0 = 72;        //73;
     spece_set.spece_para.h = 0.01 * spece_set.spece_para.H_0;
 
     spece_set.phi = -234.0;
