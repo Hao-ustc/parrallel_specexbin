@@ -25,13 +25,14 @@ void datafit(vector<GAS> &gp, Setting &spece_set, datahead b)
             gp[i].pos[j] -= 250.0;
         }
 
-        double px = gp[i].pos[0] - _posx_;
-        double py = gp[i].pos[1] - _posy_;
-        double pz = gp[i].pos[2] - _posz_;
+        double px = gp[i].pos[0] ;
+        double py = gp[i].pos[1] ;
+        double pz = gp[i].pos[2] ;
         //impact factor
         float temppos = DD(px, py, pz);
         temppos = pow(temppos, 0.5);
         gp[i].pos[3] = temppos;
+        
         gp[i].pos[0] = gp[i].pos[0] / pos_corr;
         gp[i].pos[1] = gp[i].pos[1] / pos_corr;
         gp[i].pos[2] = gp[i].pos[2] / pos_corr;
