@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     sprintf(spece_set.galaxy, "%s", argv[2]);
     sprintf(spece_set.file_redshift, "/data6/Hao_L/result/pure_redshift.txt");
     sprintf(spece_set.spec_ion_filename, "%sspecions_i9.dat", spece_set.prefix);
-    spece_set.boxsize = 60; //in Mpc_h
+    spece_set.boxsize = 80; //in Mpc_h
     spece_set.flux_fac = 1.0;
     spece_set.spece_para.totMass = 0.258; //0.28; //0.238; //0.28;
     spece_set.spece_para.Lambda = 0.742;  //0.72; //0.762; //0.72;
