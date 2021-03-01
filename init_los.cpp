@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     double max = 0;
     double min1 = 0.0;
     double max1 = 0.0;
+    int N_lines=0;
     int filenum = 200;
     int galaxy_flag = 0;
     int N_1 = 200;
@@ -33,14 +34,12 @@ int main(int argc, char *argv[])
     R_assii(argv[3], max);
     R_assii(argv[4], min1); //stellarmass_min
     R_assii(argv[5], max1);
-    R_assii(argv[6], N_1); //n_rbins
-    R_assii(argv[7], N_2); //n_thetabins (useless)
-    R_assii(argv[8], N2);  //line in every parallel file
-
-    R_assii(argv[9], rangepmin);
-    R_assii(argv[10], rangepmax);
-    R_assii(argv[11], filenum);
-    R_assii(argv[12], galaxy_flag); //1:central
+    R_assii(argv[6], N_lines); //n_rbins
+    R_assii(argv[7], rangepmin);
+    R_assii(argv[8], rangepmax);//range of rp
+    R_assii(argv[9], filenum);
+    R_assii(argv[10], galaxy_flag); //1:central
+    R_assii(argv[11], effective_number);
     double r_range = rangepmax - rangepmin;
     if (r_range <= 0)
     {
@@ -121,7 +120,7 @@ int main(int argc, char *argv[])
     {
         char folder[100];
         cerr << mkdir(result_path, S_IRWXU) << endl;
-        sprintf(folder, "%s/a_width", result_path);
+        sprintf(folder, "%s/0_a_width", result_path);
         cerr << mkdir(folder, S_IRWXU) << endl;
         sprintf(folder, "%s/a_los", result_path);
         cerr << mkdir(folder, S_IRWXU) << endl;
