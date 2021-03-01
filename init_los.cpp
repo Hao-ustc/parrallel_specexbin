@@ -1,6 +1,6 @@
 #include "include_list.h"
 #include <set>
-#include "gdata.h"
+
 
 using namespace std;
 
@@ -63,9 +63,12 @@ int main(int argc, char *argv[])
     double boxsize = 60;
 
     //try to be a function
-    vector<Galaxy> ga;
-
-    Readdata(filenum, ga);
+    GALAXYS galaxys;
+    galaxys.load(filenum);
+    vector<GALAXY> ga;
+    ga.clear();
+    ga.swap(galaxys.galaxys);
+    
 
     char filetest[100];
     sprintf(filetest, "%s/paratest.txt", result_path);
@@ -76,28 +79,28 @@ int main(int argc, char *argv[])
     for (int i = 0; i < ga.size(); i++)
     {
         //output
-        double rc3 = 3.0 / (4.0 * Pi) * ga[i].halomass / (200.0 * rhocz);
+        double rc3 = 3.0 / (4.0 * Pi) * ga[i].halo.submass / (200.0 * rhocz);
         double rc = pow(rc3, 1.0 / 3.0);
         outtest << ga[i].id << " "
-                << ga[i].halomass << " "
+                << ga[i].halo.submass << " "
                 << ga[i].Rvir << " "
                 << rc << endl;
         if (ga[i].SFR < 1.0 || ga[i].SFR > 20.0)
             continue;
-        if (log10(ga[i].halomass) > min && log10(ga[i].halomass) < max)
+        if (log10(ga[i].halo.submass) > min && log10(ga[i].halo.submass) < max)
         {
             //if ((ga[i].center_coordinates[2] - posx) < 5 && (ga[i].center_coordinates[2] - posx) > -5)
             //{
             if (galaxy_flag != 0)
             {
-                if (log10(ga[i].Mass) > min1 && log10(ga[i].Mass) < max1 && ga[i].flag == galaxy_flag)
+                if (log10(ga[i].stellarmass) > min1 && log10(ga[i].stellarmass) < max1 && ga[i].flag == galaxy_flag)
                 {
                     ga_choose.push_back(i);
                 }
             }
             else if (galaxy_flag == 0)
             {
-                if (log10(ga[i].Mass) > min1 && log10(ga[i].Mass) < max1)
+                if (log10(ga[i].stellarmass) > min1 && log10(ga[i].stellarmass) < max1)
                 {
                     ga_choose.push_back(i);
                 }
@@ -107,7 +110,7 @@ int main(int argc, char *argv[])
     }
     outtest.close();
     cerr << ga_choose.size() << endl;
-    //cerr << "galaxy " << ga[ga_choose[0]].id << " is choosen. The mass of it is " << ga[ga_choose[0]].halomass << endl;
+    //cerr << "galaxy " << ga[ga_choose[0]].id << " is choosen. The mass of it is " << ga[ga_choose[0]].halo.submass << endl;
 
     char los[100];
     char fileplace[200];
@@ -444,8 +447,8 @@ int main(int argc, char *argv[])
                  << ga[ga_choose[i]].center_coordinates[0] << " "
                  << ga[ga_choose[i]].center_coordinates[1] << " "
                  << ga[ga_choose[i]].center_coordinates[2] << " "
-                 << ga[ga_choose[i]].halomass << " "
-                 << ga[ga_choose[i]].Mass << " "
+                 << ga[ga_choose[i]].halo.submass << " "
+                 << ga[ga_choose[i]].stellarmass << " "
                  << ga[ga_choose[i]].flag << " "
                  << redshift_center << endl;
     }
