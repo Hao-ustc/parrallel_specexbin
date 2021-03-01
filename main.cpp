@@ -14,11 +14,15 @@ int main(int argc, char *argv[])
     int NUM_THREADS = 64;
     int test = -1;
     int argnumber = 1;
+    Los_poss los_poss;
 
     Setting spece_set;
     sprintf(spece_set.TIME, "%s", argv[argnumber]);
     argnumber++;
     R_assii(argv[argnumber], NUM_THREADS);
+    argnumber++;
+    
+    R_assii(argv[argnumber], los_poss.los_numbers); //line 的总数
 
     sprintf(spece_set.file_redshift, "/data6/Hao_L/result/pure_redshift.txt");
     sprintf(spece_set.spec_ion_filename, "%sspecions_i9.dat", spece_set.prefix);
@@ -32,8 +36,7 @@ int main(int argc, char *argv[])
 
     spece_set.phi = -234.0;
 
-    Los_poss los_poss;
-    R_assii(argv[4], los_poss.los_numbers); //line 的总数
+    
     char los[100];
     sprintf(los, "./result/%s/parallel/los.txt", argv[1]);
     if ((spece_set.LOSfile = fopen(los, "r")) == NULL)
