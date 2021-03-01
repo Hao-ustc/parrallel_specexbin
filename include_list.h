@@ -14,7 +14,7 @@
 #endif
 
 #ifdef linux
-#include "/data6/Hao_L/code/head/0a_include_voidA.h.h"
+#include "/data6/Hao_L/code/head/0a_include_voidA.h"
 #endif
 #endif
 
