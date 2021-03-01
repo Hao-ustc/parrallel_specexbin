@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    vector<Gas_1> gp;
+    vector<GAS> gp;
     //Readdata(200, gp);
     double max = 0.0;
     double min = 0.0;
