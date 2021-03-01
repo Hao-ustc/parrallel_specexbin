@@ -33,11 +33,11 @@ public:
     vector<Spec_particle> spec_particles;
     Spec_particle sp;
 
-    int Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set);
-    void SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set);
+    int Check_Partical_Los(vector<GAS> &gp,Setting &spece_set);
+    void SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set,datahead &b);
 };
 
-int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set)
+int Spec_particles::Check_Partical_Los(vector<GAS> &gp,Setting &spece_set)
 {
     spec_particles.clear();
     double xspec = spece_set.xspec;
@@ -132,7 +132,7 @@ int Spec_particles::Check_Partical_Los(vector<Gas_1> &gp,Setting &spece_set)
     
     return (0);
 }
-void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set)
+void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_set, datahead &b)
 
 {
     char fileoutsmooth[200];
