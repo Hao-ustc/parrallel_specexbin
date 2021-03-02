@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     sprintf(fileplace, "%s/palace.txt", result_path);
-    ofstream tf(fileplace);
+    ofstream tfpa(fileplace);
 
     for (int i = 0; i < N_lines; i++)
     {
@@ -384,10 +384,10 @@ int main(int argc, char *argv[])
         }
 
         fprintf(LOSfile, "%lf %lf %lf %lf %d\n", redshift_center, xspec, yspec, zspec, direction);
-        tf << r << " "
+        tfpa << r << " "
            << r / ga[ga_choose[gacindex]].halo.Rvir << " " << gacindex << endl;
     }
-    tf.close();
+    tfpa.close();
     fclose(LOSfile);
 #endif
 
