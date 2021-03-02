@@ -199,7 +199,7 @@ void Calculate2(ofstream &out, vector<Data> &c, double range, double rphx)
 }
 void Deal(vector<Data> &c, vector<Data> &s, int filenum)
 {
-
+    char filename[100];
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/1c_%03d_local.txt", filenum);
     ofstream out1(filename);
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/1s_%03d_local.txt", filenum);
@@ -211,7 +211,7 @@ void Deal(vector<Data> &c, vector<Data> &s, int filenum)
 }
 void Deal(vector<Data> &c, vector<Data> &s, int filenum, float mass_bin_start)
 {
-
+    char filename[100];
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/halomass/1c_%03d_%.2f_local.txt", filenum, mass_bin_start);
     ofstream out1(filename);
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/halomass/1s_%03d_%.2f_local.txt", filenum, mass_bin_start);
@@ -223,6 +223,7 @@ void Deal(vector<Data> &c, vector<Data> &s, int filenum, float mass_bin_start)
 }
 void Deal(vector<Data> &c, vector<Data> &s, int filenum, double range, double vhx)
 {
+    char filename[100];
     int label = (int)range;
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/velocity/%03d/%d1c_%03d_local.txt", filenum, label, filenum);
     ofstream out1(filename);
@@ -235,6 +236,7 @@ void Deal(vector<Data> &c, vector<Data> &s, int filenum, double range, double vh
 }
 void Deal2(vector<Data> &c, vector<Data> &s, int filenum, double range, double rphx)
 {
+    char filename[100];
     int label = (int)range;
     sprintf(filename, "/data6/Hao_L/risk/column_density/data/columndensty_rp/density_to_velocity/%03d/%f1c_local.txt", filenum, range);
     ofstream out1(filename);
