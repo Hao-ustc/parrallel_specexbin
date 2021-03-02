@@ -1,7 +1,6 @@
 #include "include_list.h"
 #include <set>
 
-
 using namespace std;
 
 #define Pi 3.1415926
@@ -18,13 +17,10 @@ int main(int argc, char *argv[])
     double max = 0;
     double min1 = 0.0;
     double max1 = 0.0;
-    int N_lines=0;
+    int N_lines = 0;
     int filenum = 200;
     int galaxy_flag = 0;
-    int N_1 = 200;
-    int N_2 = 10;
-    int N2 = 100;
-    int N_3 = 4;
+
     double rangepmin = 0.0; //Mpc
     double rangepmax = 1.0; //Mpc
     int effective_number = 5;
@@ -36,7 +32,7 @@ int main(int argc, char *argv[])
     R_assii(argv[5], max1);
     R_assii(argv[6], N_lines); //n_rbins
     R_assii(argv[7], rangepmin);
-    R_assii(argv[8], rangepmax);//range of rp
+    R_assii(argv[8], rangepmax); //range of rp
     R_assii(argv[9], filenum);
     R_assii(argv[10], galaxy_flag); //1:central
     R_assii(argv[11], effective_number);
@@ -67,7 +63,24 @@ int main(int argc, char *argv[])
     vector<GALAXY> ga;
     ga.clear();
     ga.swap(galaxys.galaxys);
-    
+
+
+
+    char fileplace[200];
+
+    sprintf(fileplace, "%s/palace%03d.txt", result_path, 0);
+    ofstream tf(fileplace);
+    if (!(tf.is_open()))
+    {
+        char folder[100];
+        cerr << mkdir(result_path, S_IRWXU) << endl;
+        sprintf(folder, "%s/0_a_width", result_path);
+        cerr << mkdir(folder, S_IRWXU) << endl;
+        sprintf(folder, "%s/a_los", result_path);
+        cerr << mkdir(folder, S_IRWXU) << endl;
+       
+    }
+    tf.close();//prepare mkdir
 
     char filetest[100];
     sprintf(filetest, "%s/paratest.txt", result_path);
@@ -111,27 +124,15 @@ int main(int argc, char *argv[])
     cerr << ga_choose.size() << endl;
     //cerr << "galaxy " << ga[ga_choose[0]].id << " is choosen. The mass of it is " << ga[ga_choose[0]].halo.submass << endl;
 
-    char los[100];
-    char fileplace[200];
-
-    sprintf(fileplace, "%s/palace%03d.txt", result_path, 0);
-    ofstream tf(fileplace);
-    if (!(tf.is_open()))
-    {
-        char folder[100];
-        cerr << mkdir(result_path, S_IRWXU) << endl;
-        sprintf(folder, "%s/0_a_width", result_path);
-        cerr << mkdir(folder, S_IRWXU) << endl;
-        sprintf(folder, "%s/a_los", result_path);
-        cerr << mkdir(folder, S_IRWXU) << endl;
-        for (int i = 0; i < ga_choose.size(); i++)
+   
+    
+     for (int i = 0; i < ga_choose.size(); i++)
         {
+            char folder[100];
             int j = ga_choose[i];
             sprintf(folder, "./result/%s/galaxy%05d", argv[1], i);
             cerr << mkdir(folder, S_IRWXU) << endl;
         }
-    }
-    tf.close();
 
 #ifdef PA
     for (int i = 0; i < ga_choose.size(); i++)
@@ -301,140 +302,110 @@ int main(int argc, char *argv[])
 #ifdef RAN
     set<int> xset;
     set<int> yset;
+    
     // ser<>
     xset.clear();
     yset.clear();
-
+    N_lines *= ga_choose.size();
     srand((unsigned)time(NULL));
-    for (int i = 0; i < ga_choose.size(); i++)
-    {
-        N_3 = 0;
-        int countline = 0;
 
-        int setcountx = xset.size();
-        int setcounty = xset.size();
-        if (setcountx != 0 || setcounty != 0)
+    int setcountx = xset.size();
+    int setcounty = yset.size();
+
+    if (setcountx != 0 || setcounty != 0)
+    {
+        exit(-1);
+    }
+    FILE *LOSfile;
+     char los[100];
+    sprintf(los, "%s/los.txt", result_path);
+    cerr << los << endl;
+    if ((LOSfile = fopen(los, "w")) == NULL)
+    {
+        cerr << "Could not open file " << los << endl;
+        return 0;
+    }
+    sprintf(fileplace, "%s/palace.txt", result_path);
+    ofstream tf(fileplace);
+
+    for (int i = 0; i < N_lines; i++)
+    {
+        double r = 0.0;
+        r = ((double)rand()) / (double)RAND_MAX; //Mpc
+
+        r = pow(r, 0.5);
+        r = r * rangepmax;
+        if (r < rangepmin)
         {
+            i--;
+            continue;
+        }
+
+        double theta = ((double)rand()) / (double)RAND_MAX;
+        theta *= (2.0 * Pi);
+
+        int gacindex = rand() % ga_choose.size();
+
+        double dx = r * cos(theta);
+        double dy = r * sin(theta);
+
+        xspec = ga[ga_choose[gacindex]].center_coordinates[0] + dx;
+        yspec = ga[ga_choose[gacindex]].center_coordinates[1] + dy;
+        zspec = ga[ga_choose[gacindex]].center_coordinates[2];
+        direction = 2;
+        xspec -= 250;
+        yspec -= 250;
+        zspec -= 250;
+
+        xspec /= boxsize;
+        yspec /= boxsize;
+        zspec /= boxsize;
+
+        int tempx = xspec * effective_number;
+        int tempy = yspec * effective_number;
+        xset.insert(tempx);
+        yset.insert(tempy);
+        if (xset.size() == setcountx && yset.size() == setcounty)
+        {
+            i--;
+            continue;
+        }
+        else if (xset.size() == (setcountx + 1) || yset.size() == (setcounty + 1))
+        {
+            setcountx = xset.size();
+            setcounty = yset.size();
+        }
+        else
+        {
+            cerr << "we must exit now!!!!" << endl;
+            cerr << xset.size() << " " << yset.size() << " "
+                 << setcountx << " " << setcounty << endl;
             exit(-1);
         }
 
-        FILE *LOSfile;
-        sprintf(los, "%s/los%03d.txt", result_path, i);
-        cerr << los << endl;
-        FILE *LOSfiles; //to be set in for loops
-
-        if ((LOSfile = fopen(los, "w")) == NULL)
-        {
-            cerr << "Could not open file " << los << endl;
-            return 0;
-        }
-        sprintf(fileplace, "%s/palace%03d.txt", result_path, i);
-        ofstream tf(fileplace);
-
-        double deltatheta = (double)360 / N_2;
-
-        for (int k = 0; k < N_1; k++)
-        {
-            double r = 0.0;
-            r = ((double)rand()) / (double)RAND_MAX; //Mpc
-
-            r = pow(r, 0.5);
-            r = r * rangepmax;
-            if (r < rangepmin)
-            {
-                k--;
-                continue;
-            }
-            // for (int j = 0; j < N_2; j++)
-            // {
-            //int j = k % 5;
-            double theta = ((double)rand()) / (double)RAND_MAX;
-            // double theta = ((double)j);
-            theta *= (2.0 * Pi);
-
-            double dx = r * cos(theta);
-            double dy = r * sin(theta);
-
-            xspec = ga[ga_choose[i]].center_coordinates[0] + dx;
-            yspec = ga[ga_choose[i]].center_coordinates[1] + dy;
-            zspec = ga[ga_choose[i]].center_coordinates[2];
-            direction = 2;
-            xspec -= 250;
-            yspec -= 250;
-            zspec -= 250;
-
-            xspec /= boxsize;
-            yspec /= boxsize;
-            zspec /= boxsize;
-
-            int tempx = xspec * effective_number;
-            int tempy = yspec * effective_number;
-            xset.insert(tempx);
-            yset.insert(tempy);
-            if (xset.size() == setcountx && yset.size() == setcounty)
-            {
-                k--;
-                continue;
-            }
-            else if (xset.size() == (setcountx + 1) || yset.size() == (setcounty + 1))
-            {
-                setcountx = xset.size();
-                setcounty = yset.size();
-            }
-            else
-            {
-                cerr << "we must exit now!!!!" << endl;
-                cerr << xset.size() << " " << yset.size() << " "
-                     << setcountx << " " << setcounty << endl;
-                exit(-1);
-            }
-
-            fprintf(LOSfile, "%lf %lf %lf %lf %d\n", redshift_center, xspec, yspec, zspec, direction);
-            tf << r << " " << r / ga[ga_choose[i]].Rvir << endl;
-            if (countline % N2 == 0)
-            {
-
-                if (N_3 != 0)
-                    fclose(LOSfiles);
-                sprintf(los, "%s/parallel/los%03d_%01d.txt", result_path, i, N_3);
-                cerr << los << endl;
-
-                if ((LOSfiles = fopen(los, "w")) == NULL)
-                {
-                    cerr << "Could not open file " << los << endl;
-                    exit(-1);
-                }
-                N_3++;
-            }
-
-            fprintf(LOSfiles, "%lf %lf %lf %lf %d\n", redshift_center, xspec, yspec, zspec, direction);
-            countline++;
-            //}
-        }
-        xset.clear();
-        yset.clear();
-
-        tf.close();
-        fclose(LOSfiles);
-        fclose(LOSfile);
+        fprintf(LOSfile, "%lf %lf %lf %lf %d\n", redshift_center, xspec, yspec, zspec, direction);
+        tf << r << " "
+           << r / ga[ga_choose[gacindex]].halo.Rvir << " " << gacindex << endl;
     }
+    tf.close();
+    fclose(LOSfile);
 #endif
 
     char filename_para[200];
     sprintf(filename_para, "%s/para.txt", result_path);
     ofstream outpara(filename_para);
-    outpara << "cores " << N_3 << endl
+    outpara 
             << "galaxy number " << ga_choose.size() << endl
             << "workpalace " << argv[1] << endl
             << "halomass bin  " << min << "~" << max << endl
             << "stellarmass bin " << min1 << "~" << max1 << endl
             << "rangep " << rangepmin << "~" << rangepmax << endl
-            << "lines " << N_1 << endl
+            << "lines " << N_lines << endl
             << "filenum " << filenum << " " << redshift_center << endl
             << "galaxyflag " << galaxy_flag << endl;
 
-    outpara << "./build_pbs " << argv[1] << " " << 0 << " " << ga_choose.size() - 1
-            << " squeue 9 " << N_3 << " 20 08 49 10 20" << endl;
+    outpara << "./build_pbs " << argv[1] << " "  
+            <<N_lines << endl;
     outpara.close();
     sprintf(filename_para, "%s/galaxypara.txt", result_path);
     ofstream outgpara(filename_para);
