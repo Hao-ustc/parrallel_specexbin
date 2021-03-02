@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     argnumber++;
     
     R_assii(argv[argnumber], los_poss.los_numbers); //line 的总数
-
-    sprintf(spece_set.file_redshift, "/data6/Hao_L/result/pure_redshift.txt");
+    cerr<<1111<<endl;
+    sprintf(spece_set.file_redshift, "/data6/Hao_L/result/simulation/voidA/redshiftmovie.txt");
     sprintf(spece_set.spec_ion_filename, "%sspecions_i9.dat", spece_set.prefix);
     spece_set.boxsize = 80; //in Mpc_h
     spece_set.flux_fac = 1.0;
@@ -38,26 +38,25 @@ int main(int argc, char *argv[])
 
     
     char los[100];
-    sprintf(los, "./result/%s/parallel/los.txt", argv[1]);
-    if ((spece_set.LOSfile = fopen(los, "r")) == NULL)
+    sprintf(los, "./result/%s/los.txt", argv[1]);
+    if ((los_poss.in_los = fopen(los, "r")) == NULL)
     {
         cerr << "Could not open file " << los << endl;
         return 0;
     }
-    los_poss.in_los = spece_set.LOSfile;
-    fclose(spece_set.LOSfile);
-    sprintf(los, "./result/%s/parallel/palace.txt", argv[1]);
-    if ((spece_set.LOSfile = fopen(los, "r")) == NULL)
+    
+    sprintf(los, "./result/%s/palace.txt", argv[1]);
+    if ((los_poss.in_palace = fopen(los, "r")) == NULL)
     {
         cerr << "Could not open file " << los << endl;
         return 0;
     }
-    los_poss.in_palace = spece_set.LOSfile;
-    fclose(spece_set.LOSfile);
+    
+    cerr<<111<<endl;
     los_poss.load();
     fclose(los_poss.in_los);
     fclose(los_poss.in_palace); //finished
-
+    cerr<<1<<endl;
     //line has already been read in
 
     spece_set.load(los_poss.los_pos_vector[0]); //to get filenum
@@ -67,11 +66,12 @@ int main(int argc, char *argv[])
     vector<GAS> gp;
     gp.clear();
     gp.swap(gass.void_gas);
-
+    cerr<<11<<endl;
     sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
     ofstream out_ew(los);
 
     omp_set_num_threads(NUM_THREADS);
+    
 #pragma omp parallel firstprivate(spece_set)
     {
         int thread_id;
