@@ -136,7 +136,7 @@ public:
     phi = 0;
     last_filenum = 0;
     taufact0 = 1.0;
-    sprintf(prefix, "./prepare/ionfiles/");
+    sprintf(prefix, "./ionfiles/");
   }
 };
 
