@@ -10,7 +10,7 @@ using namespace std;
 class RUNNING_init_los
 {
 };
-//./init_los 0629 12.0 12.5 300 5 50 0.25 99 1
+//./init_los 0629 12.0 12.5 12.0 12.5 100 0 0.25 99 1 5 
 int main(int argc, char *argv[])
 {
     double min = 0;
