@@ -11,6 +11,10 @@ void datafit(vector<GAS> &gp, Setting &spece_set, datahead b)
     double unit_mass = spece_set.spece_para.unit_Mass;
     double pos_corr = spece_set.boxsize;
 
+    int  ri;
+        double hold;
+
+        ri = 0;
     for (int i = 0; i < gp.size(); i++)
     {
 
@@ -47,13 +51,9 @@ void datafit(vector<GAS> &gp, Setting &spece_set, datahead b)
         gp[i].density = gp[i].density * (6.77e-31 / 1.88e-29); //right
 
         //Rotate90Box();
-        int i, ri;
-        double hold;
+        
 
-        ri = 0;
-
-        for (i = 0; i < gp.size(); i++)
-        {
+       
             if (spece_set.direction == 1)
             {
                 hold = gp[i].pos[2];
@@ -81,9 +81,10 @@ void datafit(vector<GAS> &gp, Setting &spece_set, datahead b)
                 gp[i].vel[2] = hold;
                 ri++;
             }
-        }
-        fprintf(stderr, "Physically rotated %d particles, because direction= %d\n", ri, spece_set.direction);
+        
+        
     }
+    fprintf(stderr, "Physically rotated %d particles, because direction= %d\n", ri, spece_set.direction);
 }
 
 #endif
