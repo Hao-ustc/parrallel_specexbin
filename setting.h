@@ -47,6 +47,10 @@ void Los_poss::load()
 {
   Los_pos los_point;
   int t_lines=0;
+  if (in_los==NULL)
+  {
+    exit(-1);
+  }
   while (!feof(in_los))
   {
     /*
@@ -62,6 +66,7 @@ void Los_poss::load()
     los_point.file_lines=t_lines;
     los_pos_vector.push_back(los_point);
     t_lines++;
+    
   }
   los_pos_vector.pop_back();
   if (los_pos_vector.size() ==los_numbers)
