@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     int direction;
     double redshift_center;
     Z_File t;
-    sprintf(t.file_redshift, "/data6/Hao_L/result/pure_redshift.txt");
+    sprintf(t.file_redshift, "/data6/Hao_L/result/simulation/voidA/pure_redshift.txt");
     redshift_center = t.Check_File_Z(filenum);
     double rhocz = (2.77e11) * (1 - 0.258 + 0.258 * pow((1 + redshift_center), 3.0)) / (pow(1.0 + redshift_center, 3.0));
     double xspec, yspec, zspec;
