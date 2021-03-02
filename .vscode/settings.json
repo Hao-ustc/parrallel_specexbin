@@ -1,10 +1,12 @@
 {
     "files.associations": {
+        "*.h": "cpp",
         "memory": "cpp",
         "vector": "cpp",
         "algorithm": "cpp",
         "xlocale": "cpp",
         "xstring": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "xtree": "cpp"
     }
 }
