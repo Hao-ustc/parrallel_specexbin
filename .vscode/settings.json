@@ -7,6 +7,7 @@
         "xlocale": "cpp",
         "xstring": "cpp",
         "cmath": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "iostream": "cpp"
     }
 }
