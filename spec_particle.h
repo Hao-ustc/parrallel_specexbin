@@ -635,9 +635,9 @@ void Spec_particles::SmoothSpec(LOS &los,Ion_all &spece_ionall,Setting &spece_se
     int counteffective = 0;
 #ifdef TEST
     char filenameeffective[100];
-    sprintf(filenameeffective, "./result/%s/galaxy%s/efc_%f_%f_%f_%f.txt", spece_set.TIME, spece_set.galaxyindex_spec, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
+    sprintf(filenameeffective, "./result/%s/galaxy%05d/efc_%f_%f_%f_%f.txt", spece_set.TIME, spece_set.galaxyindex_spec, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
     ofstream efc(filenameeffective);
-    sprintf(filenameeffective, "./result/%s/galaxy%s/efele_%f_%f_%f_%f.txt", spece_set.TIME, spece_set.galaxyindex_spec, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
+    sprintf(filenameeffective, "./result/%s/galaxy%05d/efele_%f_%f_%f_%f.txt", spece_set.TIME, spece_set.galaxyindex_spec, spece_set.redshift_center, spece_set.xspec, spece_set.yspec, spece_set.zspec);
     ofstream efc1(filenameeffective);
 #endif
     for (int i = 0; i < los.nzbins; i++)
