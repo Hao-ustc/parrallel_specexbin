@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     {
         char folder[100];
         cerr << mkdir(result_path, S_IRWXU) << endl;
-        sprintf(folder, "%s/0_a_width", result_path);
+        sprintf(folder, "./result/0_a_width/%s", argv[1]);
         cerr << mkdir(folder, S_IRWXU) << endl;
         sprintf(folder, "%s/a_los", result_path);
         cerr << mkdir(folder, S_IRWXU) << endl;
