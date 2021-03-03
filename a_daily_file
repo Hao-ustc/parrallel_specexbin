@@ -425,6 +425,7 @@ setting: line_spec:help us search for more details in palace.txt
 
 01/03/2021
 
-1. ./init_los_ran 1221 1.0 100.0 10.4 10.6 800 5 800 0.6 2.0 104 0
+1. ./init_los 0301 1.0 100.0 10.4 10.6 100 0 0.6 99 0 5
+2. ./init_los 0302 1.0 100.0 10.4 10.6 600 0 0.6 99 0 5
 
 
