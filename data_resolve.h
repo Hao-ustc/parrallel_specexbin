@@ -33,6 +33,7 @@ void my_EW::data_resolve( Ion_all &spece_ionall, Setting spece_set)
             ew[j] += dwidth;
         } //now width is the EW of the line
     }
+    delete[] ew;
 }
 
 #endif
