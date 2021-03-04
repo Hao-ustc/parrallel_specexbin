@@ -69,9 +69,7 @@ int main(int argc, char *argv[])
     cerr<<11<<endl;
     sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
     ofstream out_ew(los);
-    out_ew.close();
-    sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
-    ofstream out_ew(los);
+    
 
     omp_set_num_threads(NUM_THREADS);
     
