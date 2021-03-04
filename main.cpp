@@ -69,6 +69,9 @@ int main(int argc, char *argv[])
     cerr<<11<<endl;
     sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
     ofstream out_ew(los);
+    out_ew.close();
+    sprintf(los, "./result/0_a_width/%s/lines_rp_rper_ews.txt", argv[1]); //output
+    ofstream out_ew(los);
 
     omp_set_num_threads(NUM_THREADS);
     
@@ -96,6 +99,7 @@ int main(int argc, char *argv[])
             spece_ionall.Tau(shortlos, spece_set);
 
             my_EW my_ew;
+            my_ew.redshift_track.clear();
             int pospoint = OutTau(shortlos, spece_ionall, spece_set, my_ew.redshift_track);
 
             my_ew.data_resolve(spece_ionall, spece_set);
