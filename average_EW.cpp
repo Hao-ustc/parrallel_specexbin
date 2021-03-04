@@ -11,6 +11,9 @@ using namespace std;
 class columnDatas
 {
 public:
+    int t_lines;
+    int galaxy_index;
+
     double r;
     double r2rvir;
     double r2rspsh;
@@ -33,6 +36,8 @@ int main(int argc, char *argv[])
 
     char result_path[100];
     sprintf(result_path, "/data6/Hao_L/my_specexbin/result");
+    float redshift;
+    R_assii(argv[2],redshift);
     double deltarin = 10; //kpc
     double deltarout = 100;
 #ifdef RRR
@@ -61,28 +66,36 @@ int main(int argc, char *argv[])
     vector<columnDatas> pp;
 
     char path[1000];
-    sprintf(path, "%s/%s/width/ew_r_all.data", result_path, argv[1]);
+    sprintf(path, "%s/0_a_width/%s/lines_rp_rper_ews.txt", result_path, argv[1]);
     ifstream in(path);
 
     char path2[100];
-    sprintf(path2, "%s/00000_width/%s_average_EW.txt", result_path, argv[1]);
+    sprintf(path2, "%s/0_a_width/%s/average_EW.txt", result_path, argv[1]);
     ofstream out(path2);
     cerr << 1 << endl;
     while (!in.eof())
     {
         columnDatas p;
         char buffer[80];
-        double value;
+        double values;
+        int value;
 
         in >> buffer;
         R_assii(buffer, value);
-        p.r = value; //1
+        p.t_lines = value; //1
+        R_assii(buffer, value);
+        p.galaxy_index = value; //2
+        R_assii(buffer, values);
+        p.r = value; //3
+        p.r = 1000.0*p.r / 0.72 / (1 + redshift);
+        R_assii(buffer, value);
+        p.r2rvir = value; //4
 
         for (int i = 0; i < Nions; i++)
         {
-            in >> buffer; //2-10
-            R_assii(buffer, value);
-            p.ys[i] = value;
+            in >> buffer; //5-13
+            R_assii(buffer, values);
+            p.ys[i] = values;
         }
 
         pp.push_back(p);
