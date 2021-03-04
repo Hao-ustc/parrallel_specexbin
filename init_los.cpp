@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     redshift_center = t.Check_File_Z(filenum);
     double rhocz = (2.77e11) * (1 - 0.258 + 0.258 * pow((1 + redshift_center), 3.0)) / (pow(1.0 + redshift_center, 3.0));
     double xspec, yspec, zspec;
-    double boxsize = 60;
+    double boxsize = 80;
 
     //try to be a function
     GALAXYS galaxys;
