@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     double h = 0.72;
 
     char result_path[100];
-    sprintf(result_path, "/data6/Hao_L/my_specexbin/result");
+    sprintf(result_path, "./result");
     float redshift;
     R_assii(argv[2],redshift);
     double deltarin = 10; //kpc
@@ -83,13 +83,19 @@ int main(int argc, char *argv[])
         in >> buffer;
         R_assii(buffer, value);
         p.t_lines = value; //1
+
+        in >> buffer;
         R_assii(buffer, value);
         p.galaxy_index = value; //2
+
+        in >> buffer;
         R_assii(buffer, values);
-        p.r = value; //3
+        p.r = values; //3
         p.r = 1000.0*p.r / 0.72 / (1 + redshift);
-        R_assii(buffer, value);
-        p.r2rvir = value; //4
+        
+        in >> buffer;
+        R_assii(buffer, values);
+        p.r2rvir = values; //4
 
         for (int i = 0; i < Nions; i++)
         {
@@ -103,7 +109,7 @@ int main(int argc, char *argv[])
     pp.pop_back();
     cerr << pp.size() << endl;
     in.close();
-
+    
     for (int i = 0; i < pp.size(); i++)
     {
 #ifdef RRR
